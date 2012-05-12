@@ -8,7 +8,7 @@ pp <- function(x){
 
 sets  <- c('tweets:hashtags', 'tweets:links', 'tweets:mentions', 'user:is_public')
 zsets <- c('words', 'user:followers', 'user:num_tweets')
-langs  <- c("DE", "EN", "ES", "FA", "FR", "NL", "PT", "RU", "pinyin")
+langs  <- c("DE", "EN", "ES", "FA", "FR", "NL", "PT", "RU")
 countries  <- c(
   "AE", "AF", "AG", "AM", "AO", "AQ", "AR", "AT", "AU", "AZ", "BA", "BB", "BD", 
   "BE", "BH", "BN", "BR", "BS", "BW", "BY", "CA", "CH", "CL", "CN", "CO", "CR", 
@@ -37,6 +37,8 @@ for (i in 1:length(langs)) {
   print( paste(key, pp(card)))
 }
 lang_stats <- data.frame(langs,lang_stats)
+names(lang_stats) <- c("tweet language","occurrences")
+lang_stats <- lang_stats[rev(order(lang_stats$occurrences)),]
 
 country_stats <- c(1:length(countries))
 for (i in 1:length(countries)) {
@@ -46,3 +48,8 @@ for (i in 1:length(countries)) {
   print( paste(key, pp( card)))
 }
 country_stats <- data.frame(countries,country_stats)
+names(country_stats) <- c("tweet country", "occurrences")
+country_stats <- country_stats[rev(order(country_stats$occurrences)),]
+
+# clean up the workspace
+rm(i,card,key)
