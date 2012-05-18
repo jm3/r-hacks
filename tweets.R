@@ -33,13 +33,18 @@ tweets$mention_pos  = str_locate(tweets$tweet,"@")
 tweets$length       = str_length(tweets$tweet)
 
 # plots some hotness
+fit <- lm(favs$length ~ favs$tweet_date)
 plot(favs$tweet_date,favs$length); abline(fit)
 plot(density(favs$length))
 plot(density(tweets$length))
-fit <- lm(favs$length ~ favs$tweet_date);
-plot(fit); rm(fit)
+fit <- lm(favs$length ~ favs$tweet_date)
+plot(fit)
+rm(fit)
 
-jm3tweets <- userTimeline("jm3", n=3000)
-jm3tweets[1:3]
-jm3tweets <- do.call("rbind", lapply(jm3tweets, as.data.frame))
-dim(jm3tweets)
+recent_tweets <- userTimeline("jm3", n=3000)
+recent_tweets[1:3]
+recent_tweets <- do.call("rbind", lapply(recent_tweets, as.data.frame))
+dim(recent_tweets)
+
+# working with http://www.rdatamining.com/examples/text-mining +
+# http://www.r-bloggers.com/an-example-of-social-network-analysis-with-r-using-package-igraph/
