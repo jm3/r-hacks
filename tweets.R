@@ -1,5 +1,12 @@
-# melt dates
-library(lubridate)
+# dependencies; uncomment to install
+# install.packages("lubridate")
+# install.packages("twitteR")
+# install.packages("tm")
+
+library(lubridate) # melt dates
+library(twitteR) # use the Twitter API
+library(tm) # mine text
+library(stringr) # mine text
 
 favs <- read.csv("./favs.csv")
 favs$avatar <- NULL # drop unneeded column
@@ -31,3 +38,8 @@ plot(density(favs$length))
 plot(density(tweets$length))
 fit <- lm(favs$length ~ favs$tweet_date);
 plot(fit); rm(fit)
+
+jm3tweets <- userTimeline("jm3", n=3000)
+jm3tweets[1:3]
+jm3tweets <- do.call("rbind", lapply(jm3tweets, as.data.frame))
+dim(jm3tweets)
