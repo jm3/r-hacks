@@ -1,4 +1,4 @@
-date,time,tweet,tweet_id,tweet_length,hashtag,at_mention,at_message,RT,RT_position,link,link_position,proof_related
+date,time,tweet,tweet_id,length,hashtag,at_mention,at_message,RT,RT_pos,link,link_pos,proof_related
 "2009-03-20","23:39","™",1363389711,1,FALSE,FALSE,FALSE,FALSE,-1,FALSE,-1,FALSE
 "2007-02-28","18:05","code",5757045,4,FALSE,FALSE,FALSE,FALSE,-1,FALSE,-1,FALSE
 "2007-03-02","21:25","33.3%",5803162,5,FALSE,FALSE,FALSE,FALSE,-1,FALSE,-1,FALSE
