@@ -1,31 +1,33 @@
-# load date libraries
+# melt dates
 library(lubridate)
 
 favs <- read.csv("./favs.csv")
-favs$avatar <- NULL
+favs$avatar <- NULL # drop unneeded column
 favs$tweet_date <- mdy_hms(favs$tweet_date) # coerce to POSIXct
 
+favs$link_pos     = str_locate(favs$tweet,"http")
+favs$RT_pos       = str_locate(favs$tweet,"RT")
+favs$mention_pos  = str_locate(favs$tweet,"@")
+favs$length       = str_length(favs$tweet)
+
 tweets <- read.csv("./tweets.csv")
+tweets$date <- ymd_hm(paste(tweets$date,tweets$time)) # merge date + time
 
-tweets$date <- ymd_hm(paste(tweets$date,tweets$time)) # coerce to POSIXct
-tweets$time <- NULL
-fit <- lm(tweets$tweet_length ~ tweets$link_position)
+# drop unneeded columns
+tweets$time      <- NULL
+tweets$length    <- NULL
+tweets$RT_pos    <- NULL
+tweets$link_pos  <- NULL
+
+# derive some stats
+tweets$link_pos     = str_locate(tweets$tweet,"http")
+tweets$RT_pos       = str_locate(tweets$tweet,"RT")
+tweets$mention_pos  = str_locate(tweets$tweet,"@")
+tweets$length       = str_length(tweets$tweet)
+
+# plots some hotness
+plot(favs$tweet_date,favs$length); abline(fit)
+plot(density(favs$length))
+plot(density(tweets$length))
+fit <- lm(favs$length ~ favs$tweet_date);
 plot(fit)
-
-# README.PRE-PROCESSING - NOTE: ORDER OF STEPS IS SIGNIFICANT
-# start with tweetbackup csv file
-# strip out leading twitter URL format from tweetbackup retaining only the tweet ID (so we can check it for favorites later)
-# use SEARCH() and FIND() functions in spreadsheet to detect presence + position of:
-#  * hashtags
-#  * mentions
-#  * replies
-#  * RTs
-#  * links
-# 
-# in exported file, replace ,"" with ,"
-# join double-lined tweets (ugh)
-# strip leading "jm3: " from tweets
-# format dates as YYYY-MM-DD with custom format
-# format times as 24-hour format with custom format
-# strip all commas + single quotes in tweets (this will affect the length count)
-# pad dates + time + tweet columns with QQ so we can vi replace them faster with quotes
