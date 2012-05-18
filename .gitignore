@@ -1,7 +1,7 @@
 *.Rproj
-*.csv
 *.png
 *pdf
 .RData
 .Rhistory
 .Rproj.user
+tweets.R
