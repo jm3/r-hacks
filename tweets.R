@@ -30,4 +30,4 @@ plot(favs$tweet_date,favs$length); abline(fit)
 plot(density(favs$length))
 plot(density(tweets$length))
 fit <- lm(favs$length ~ favs$tweet_date);
-plot(fit)
+plot(fit); rm(fit)
