@@ -9,28 +9,46 @@ library(tm) # mine text
 library(stringr) # mine text
 
 favs <- read.csv("./favs.csv")
-favs$avatar <- NULL # drop unneeded column
-favs$tweet_date <- mdy_hms(favs$tweet_date) # coerce to POSIXct
 
-favs$link_pos     = str_locate(favs$tweet,"http")
-favs$RT_pos       = str_locate(favs$tweet,"RT")
-favs$mention_pos  = str_locate(favs$tweet,"@")
-favs$length       = str_length(favs$tweet)
+# clean up the data
+favs <- transform(favs,
+  # drop unneeded column
+  avatar <- NULL,
+
+  # tweet IDs are opaque identifiers; we don't do math on them; thus factors
+  tweet_id <-factor(tweet_id, order=T),
+
+  # strings not factors
+  tweet <- as.character(tweet),
+  name <- as.character(name),
+
+  # coerce to POSIXct
+  tweet_date <- mdy_hms(tweet_date)
+
+  # derive some values
+  link_pos     = str_locate(tweet,"http"),
+  RT_pos       = str_locate(tweet,"RT"),
+  mention_pos  = str_locate(tweet,"@"),
+  length       = str_length(tweet),
+)
 
 tweets <- read.csv("./tweets.csv")
-tweets$date <- ymd_hm(paste(tweets$date,tweets$time)) # merge date + time
+tweets <- transform(tweets,
+  # merge date + time
+  date <- ymd_hm(paste(date,time))
 
-# drop unneeded columns
-tweets$time      <- NULL
-tweets$length    <- NULL
-tweets$RT_pos    <- NULL
-tweets$link_pos  <- NULL
+  # drop unneeded columns
+  time      <- NULL
+  length    <- NULL
+  RT_pos    <- NULL
+  link_pos  <- NULL
 
-# derive some stats
-tweets$link_pos     = str_locate(tweets$tweet,"http")
-tweets$RT_pos       = str_locate(tweets$tweet,"RT")
-tweets$mention_pos  = str_locate(tweets$tweet,"@")
-tweets$length       = str_length(tweets$tweet)
+  # derive some stats
+  link_pos     = str_locate(tweet,"http")
+  RT_pos       = str_locate(tweet,"RT")
+  mention_pos  = str_locate(tweet,"@")
+  length       = str_length(tweet)
+)
 
 # plots some hotness
 fit <- lm(favs$length ~ favs$tweet_date)
