@@ -24,3 +24,14 @@ x%/%y : Integer division 5%/%2 is 2
 df <- transform(df
   # df$local can now be referred to as local within this block
 )
+
+is.na() # test for missing data
+
+# re-coding bad values
+attach(favs)
+favs[age == 99, "age"] <- NA
+
+na.omit(tweets) # remove all reows with missing data aka. listwise deletion
+
+# within the RESHAPE packages:
+# rename: rename a var without doing newname <- oldname
