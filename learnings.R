@@ -27,9 +27,20 @@ df <- transform(df
 
 is.na() # test for missing data
 
-# re-coding bad values
+# "join" two data sets on a common key:
+tweets <- merge(tweets1, tweets2, by="tweet_id")
+# N.b. by can take a vector of keys for multi-key joins;
+tweets <- merge(tweets1,tweets2,by=c("tweet_id","screen_name"))
+
+# alternatively, just slam two matrices side-by-side into one:
+fuck_it <- cbind(tweets, favorite_foods)
+
+# to append rows, use rbind:
+tweets <- rbind(tweets,more_tweets) # rows must have the same vars
+
+# re-coding bad values (NOTE: DOES NOT SEEM TO WORK)
 attach(favs)
-favs[age == 99, "age"] <- NA
+favs[RT_pos == -1, "RT_pos"] <- NA
 
 na.omit(tweets) # remove all reows with missing data aka. listwise deletion
 
