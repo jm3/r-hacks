@@ -36,6 +36,7 @@ tweets <- read.csv("./tweets.csv")
 tweets <- transform(tweets,
   # merge date + time
   date <- ymd_hm(paste(date,time))
+  # poor man's version: tweets$date = as.Date(paste(tweets$date,tweets$time))
 
   # drop unneeded columns
   time      <- NULL
