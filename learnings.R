@@ -21,6 +21,7 @@ rownames = whatevercolumnname # specific which column name R should use for row 
 x%%y  : Modulus (x mod y) 5%%2 is 1 
 x%/%y : Integer division 5%/%2 is 2
 
+# FIXME not working for some reason
 df <- transform(df
   # df$local can now be referred to as local within this block
 )
