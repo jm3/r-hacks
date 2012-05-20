@@ -47,3 +47,7 @@ na.omit(tweets) # remove all reows with missing data aka. listwise deletion
 
 # within the RESHAPE packages:
 # rename: rename a var without doing newname <- oldname
+
+# Best Linear Unbiased Estimator
+
+# for truncated normal distributions: msm package
