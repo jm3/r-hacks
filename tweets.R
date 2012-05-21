@@ -105,27 +105,41 @@ recent_tweets[1:3]
 recent_tweets <- do.call("rbind", lapply(recent_tweets, as.data.frame)) # slick; look ma no loops
 dim(recent_tweets)
 
-# strip non-ASCII chars because TM can't handle them
-# tweet_text = iconv(recent_tweets$text, "UTF-8", "ISO-8859-1", sub="")
-tweet_corpus <-tm_map(tweet_corpus, function(x) iconv(enc2utf8(x), sub = "byte"))
+tweet_text <- recent_tweets$text
 tweet_corpus <- Corpus(VectorSource(tweet_text))
+
+# strip non-ASCII chars because TM can't handle them
+tweet_corpus <-tm_map(tweet_corpus, function(x) iconv(enc2utf8(x), sub = "byte"))
 tweet_corpus <- tm_map(tweet_corpus, tolower)
 tweet_corpus <- tm_map(tweet_corpus, removePunctuation)
 tweet_corpus <- tm_map(tweet_corpus, removeNumbers)
-tweet_stopwords <- c(stopwords('english'), "via", "joroan", "cstoller", "vnaylon")
+
+# exclude some more common stopwords i say a lot
+tweet_stopwords <- c(stopwords('english'), "via", "rt", 
+  "joroan", "jm", "stdoyle", "cstoller", "vnaylon", "jeffheuer", "ayn", "buzz", "jamiew", 
+  "peterhoneyman", "bloggerton", "proofapi", "proofads", "bmorrissey", "markjardine", 
+  "rrwhite", "timhaines", "jenspec", "adampritzker", "sugarhousebar", "mattbinkowski", 
+  "sferik", "tapbotpaul", "daksis", "jschox", "notoriouskrd", "janchip", "jonelvekrog",
+  "joshsternberg", "griffitherin", "lmorchard", "pheezy", "sheynkman", "dugsong", "timoni",
+  "konstantinhaase", "trafnar"
+)
 tweet_corpus <- tm_map(tweet_corpus, removeWords, tweet_stopwords)
 dtm <- TermDocumentMatrix(tweet_corpus, control = list(minWordLength = 1))
 findFreqTerms(dtm, lowfreq=10)
-m <- as.matrix(dtm)
+terms_matrix <- as.matrix(dtm)
 
 # calculate the frequency of words
-v <- sort(rowSums(m), decreasing=TRUE)
-myNames <- names(v)
-k <- which(names(v)=="rt");
-myNames[k] <- "RT"
-d <- data.frame(word=myNames, freq=v)
-wordcloud(d$word, d$freq, min.freq=3)
-rm(k,d)
+sorted_vector_terms <- sort(rowSums(terms_matrix), decreasing=TRUE)
+terms <- names(sorted_vector_terms)
+
+# optionally rename any problem keys
+key_to_rename <- which(names(sorted_vector_terms)=="jm");
+terms[key_to_rename] <- "jm3"
+rm(key_to_rename)
+
+clean_sorted_terms_matrix <- data.frame(word=terms, freq=sorted_vector_terms)
+wordcloud(clean_sorted_terms_matrix$word, clean_sorted_terms_matrix$freq, min.freq=3)
+rm(k, clean_sorted_terms_matrix, dtm, sorted_vector_terms, terms, terms_matrix, tweet_stopwords)
 
 # working with http://www.rdatamining.com/examples/text-mining +
 # http://www.r-bloggers.com/an-example-of-social-network-analysis-with-r-using-package-igraph/
