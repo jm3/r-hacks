@@ -8,6 +8,7 @@ library(twitteR) # use the Twitter API
 library(tm) # mine text
 library(stringr) # mine text
 library(msm) # truncated normal distributions
+library(wordcloud) # for TM stuff
 
 favs <- read.csv("./favs.csv")
 
@@ -101,8 +102,30 @@ rm(graphable_df)
 
 recent_tweets <- userTimeline("jm3", n=3000)
 recent_tweets[1:3]
-recent_tweets <- do.call("rbind", lapply(recent_tweets, as.data.frame))
+recent_tweets <- do.call("rbind", lapply(recent_tweets, as.data.frame)) # slick; look ma no loops
 dim(recent_tweets)
+
+# strip non-ASCII chars because TM can't handle them
+# tweet_text = iconv(recent_tweets$text, "UTF-8", "ISO-8859-1", sub="")
+tweet_corpus <-tm_map(tweet_corpus, function(x) iconv(enc2utf8(x), sub = "byte"))
+tweet_corpus <- Corpus(VectorSource(tweet_text))
+tweet_corpus <- tm_map(tweet_corpus, tolower)
+tweet_corpus <- tm_map(tweet_corpus, removePunctuation)
+tweet_corpus <- tm_map(tweet_corpus, removeNumbers)
+tweet_stopwords <- c(stopwords('english'), "via", "joroan", "cstoller", "vnaylon")
+tweet_corpus <- tm_map(tweet_corpus, removeWords, tweet_stopwords)
+dtm <- TermDocumentMatrix(tweet_corpus, control = list(minWordLength = 1))
+findFreqTerms(dtm, lowfreq=10)
+m <- as.matrix(dtm)
+
+# calculate the frequency of words
+v <- sort(rowSums(m), decreasing=TRUE)
+myNames <- names(v)
+k <- which(names(v)=="rt");
+myNames[k] <- "RT"
+d <- data.frame(word=myNames, freq=v)
+wordcloud(d$word, d$freq, min.freq=3)
+rm(k,d)
 
 # working with http://www.rdatamining.com/examples/text-mining +
 # http://www.r-bloggers.com/an-example-of-social-network-analysis-with-r-using-package-igraph/
