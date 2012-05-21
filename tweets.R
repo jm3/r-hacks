@@ -122,7 +122,7 @@ tweet_stopwords <- c(stopwords('english'), "via", "rt",
   "rrwhite", "timhaines", "jenspec", "adampritzker", "sugarhousebar", "mattbinkowski", 
   "sferik", "tapbotpaul", "daksis", "jschox", "notoriouskrd", "janchip", "jonelvekrog",
   "joshsternberg", "griffitherin", "lmorchard", "pheezy", "sheynkman", "dugsong", "timoni",
-  "konstantinhaase", "trafnar", "andrewvoelker"
+  "konstantinhaase", "trafnar", "farbood", "kmaverick", "tiboutoo", "aidaan"
 )
 tweet_corpus <- tm_map(tweet_corpus, removeWords, tweet_stopwords)
 dtm <- TermDocumentMatrix(tweet_corpus, control = list(minWordLength = 1))
