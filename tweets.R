@@ -1,16 +1,14 @@
 # dependencies; uncomment to install
-# install.packages("lubridate")
-# install.packages("twitteR")
-# install.packages("tm")
-
-library(lubridate) # melt dates
-library(twitteR) # use the Twitter API
-library(tm) # mine text
-library(stringr) # mine text
-library(msm) # truncated normal distributions
-library(wordcloud) # for TM stuff
-library(msm) # for rtnormal function
 library(ggplot2) # for graphing
+library(gridExtra) # for side-by-side graphing
+library(lubridate) # melt dates
+library(MASS) # fitdistr; max-likelihood fitting of univariate distr.s
+library(msm) # rtnormal; truncated normal distributions
+library(stringr) # mine text
+library(timeSeries) # work with TS data
+library(tm) # mine text
+library(twitteR) # use the Twitter API 
+library(wordcloud) # generate visual word clouds
 
 favs <- read.csv("./favs.csv")
 
@@ -38,7 +36,6 @@ tweets <- read.csv("./tweets.csv")
 attach(tweets)
 # merge date + time
 tweets$date <- ymd_hm(paste(date,time))
-# poor man's version: tweets$date = as.Date(paste(tweets$date,tweets$time))
 
 # drop unneeded columns
 tweets$time      <- NULL
@@ -77,9 +74,11 @@ p1 + geom_density(alpha = 0.8, fill="#498376", colour="#498376")
 num_obs = 10000
 series=c(array("Favorites", num_obs), array("All Tweets", num_obs))
 merged_data = data.frame( series=series, data=c(favs_samples$dist, tweets_samples$dist))
-p1 <- ggplot(merged_data, aes(x=merged_data$data, fill=series))
-p1 + geom_density(alpha = 0.8)
-# rm(merged_data, num_obs, p1)
+p2 <- ggplot(merged_data, aes(x=merged_data$data, fill=series))
+p2 + geom_density(alpha = 0.8)
+sidebysideplot <- grid.arrange(p1, p2, ncol=2)
+
+rm(merged_data, num_obs, p1)
 
 #Plotting a general, time-series data
 ggplot(favs, aes(date, length)) + geom_line() + xlab("") + ylab("Tweet Lengths")
@@ -100,7 +99,7 @@ rm(graphable_df)
 weekly_counts = aggregate(favs_ts, favs_by_week, FUN=function(x) { length(x) })
 graphable_df = data.frame(date=weeks, tweets_per_week=weekly_counts$tweet_lengths)
 ggplot(graphable_df, aes(date,tweets_per_week)) + geom_line() + xlab("") + ylab("Number of Tweets Favorited per Week")
-rm(graphable_df)
+rm(graphable_df, series)
 
 recent_tweets <- userTimeline("jm3", n=3000)
 recent_tweets[1:3]
@@ -123,7 +122,7 @@ tweet_stopwords <- c(stopwords('english'), "via", "rt",
   "rrwhite", "timhaines", "jenspec", "adampritzker", "sugarhousebar", "mattbinkowski", 
   "sferik", "tapbotpaul", "daksis", "jschox", "notoriouskrd", "janchip", "jonelvekrog",
   "joshsternberg", "griffitherin", "lmorchard", "pheezy", "sheynkman", "dugsong", "timoni",
-  "konstantinhaase", "trafnar"
+  "konstantinhaase", "trafnar", "andrewvoelker"
 )
 tweet_corpus <- tm_map(tweet_corpus, removeWords, tweet_stopwords)
 dtm <- TermDocumentMatrix(tweet_corpus, control = list(minWordLength = 1))
