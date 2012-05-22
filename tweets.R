@@ -9,6 +9,8 @@ library(tm) # mine text
 library(stringr) # mine text
 library(msm) # truncated normal distributions
 library(wordcloud) # for TM stuff
+library(msm) # for rtnormal function
+library(ggplot2) # for graphing
 
 favs <- read.csv("./favs.csv")
 
@@ -77,7 +79,7 @@ series=c(array("Favorites", num_obs), array("All Tweets", num_obs))
 merged_data = data.frame( series=series, data=c(favs_samples$dist, tweets_samples$dist))
 p1 <- ggplot(merged_data, aes(x=merged_data$data, fill=series))
 p1 + geom_density(alpha = 0.8)
-rm(merged_data, num_obs, p1)
+# rm(merged_data, num_obs, p1)
 
 #Plotting a general, time-series data
 ggplot(favs, aes(date, length)) + geom_line() + xlab("") + ylab("Tweet Lengths")
