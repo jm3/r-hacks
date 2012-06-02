@@ -9,8 +9,11 @@ library(timeSeries) # work with TS data
 library(tm) # mine text
 library(twitteR) # use the Twitter API 
 library(wordcloud) # generate visual word clouds
+source('multiplot.R')
 
-favs <- read.csv("./favs.csv")
+#Check if the package is installed
+#is.installed('MASS') 
+favs <- read.csv("./data/favs.csv")
 
 attach(favs)
 # tweet IDs are opaque identifiers; we don't do math on them; thus factors
@@ -32,7 +35,7 @@ favs$mention_pos  = str_locate(tweet,"@")
 favs$length       = str_length(tweet)
 detach(favs)
 
-tweets <- read.csv("./tweets.csv")
+tweets <- read.csv("./data/tweets.csv")
 attach(tweets)
 # merge date + time
 tweets$date <- ymd_hm(paste(date,time))
@@ -67,21 +70,18 @@ twitter_dist <- function( vec, num_runs=10000 ) {
 favs_samples   = twitter_dist(favs$length)
 tweets_samples = twitter_dist(tweets$length)
 
-p1 <- ggplot(favs_samples, aes(x=dist))
-p1 + geom_density(alpha = 0.8, fill="#498376", colour="#498376")
+plot <- ggplot(favs_samples, aes(x=dist))
+plot + geom_density(alpha = 0.8, fill="#498376", colour="#498376")
 
 #Overlay two density plots
 num_obs = 10000
 series=c(array("Favorites", num_obs), array("All Tweets", num_obs))
 merged_data = data.frame( series=series, data=c(favs_samples$dist, tweets_samples$dist))
-p2 <- ggplot(merged_data, aes(x=merged_data$data, fill=series))
-p2 + geom_density(alpha = 0.8)
-sidebysideplot <- grid.arrange(p1, p2, ncol=2)
-
-rm(merged_data, num_obs, p1)
+densityTweetsVFavsPlots <- ggplot(merged_data, aes(x=merged_data$data, fill=series)) + geom_density(alpha = 0.8)
+rm(merged_data, num_obs, plot, favs_samples, tweets_samples)
 
 #Plotting a general, time-series data
-ggplot(favs, aes(date, length)) + geom_line() + xlab("") + ylab("Tweet Lengths")
+tweetLengthPlot=ggplot(favs, aes(date, length)) + geom_line() + xlab("") + ylab("Tweet Lengths")
 
 #Create a time-series object from the data
 favs_ts = timeSeries(favs$length, favs$date, units = "tweet_lengths")
@@ -92,16 +92,18 @@ favs_by_week <- timeSequence(from = start(favs_ts),  to = end(favs_ts), by = "we
 weekly_means = aggregate(favs_ts, favs_by_week, mean) #mean = aggregation mechanism, can use a UDF
 weeks = ymd_hms(rownames(weekly_means))
 graphable_df = data.frame(date=weeks, mean_tweet_length=weekly_means$tweet_lengths)
-ggplot(graphable_df, aes(date,mean_tweet_length)) + geom_line() + xlab("") + ylab("Mean Length of Favorited Tweet")
+AvgTweetLengthPlot=ggplot(graphable_df, aes(date,mean_tweet_length)) + geom_line() + xlab("") + ylab("Mean Length of Favorited Tweet")
 rm(graphable_df)
 
 # Graph number of tweets favorited per week (count #observations in timeseries)
 weekly_counts = aggregate(favs_ts, favs_by_week, FUN=function(x) { length(x) })
 graphable_df = data.frame(date=weeks, tweets_per_week=weekly_counts$tweet_lengths)
-ggplot(graphable_df, aes(date,tweets_per_week)) + geom_line() + xlab("") + ylab("Number of Tweets Favorited per Week")
+tweetsPerWeekPlot=ggplot(graphable_df, aes(date,tweets_per_week)) + geom_line() + xlab("") + ylab("Number of Tweets Favorited per Week")
 rm(graphable_df, series)
 
-recent_tweets <- userTimeline("jm3", n=3000)
+multiplot(tweetsPerWeekPlot, AvgTweetLengthPlot, tweetLengthPlot, densityTweetsVFavsPlots + opts(legend.position="bottom"), cols=2)
+
+recent_tweets <- userTimeline("jm3", n=200)
 recent_tweets[1:3]
 recent_tweets <- do.call("rbind", lapply(recent_tweets, as.data.frame)) # slick; look ma no loops
 dim(recent_tweets)
