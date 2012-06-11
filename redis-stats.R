@@ -7,20 +7,13 @@ pp <- function(x){
 
 redisConnect()
 
-sets  <- c('tweets:hashtags', 'tweets:links', 'tweets:mentions', 'user:is_public')
-zsets <- c('words', 'user:followers', 'user:num_tweets')
-langs  <- c("DE", "EN", "ES", "FA", "FR", "NL", "PT", "RU")
-countries  <- c(
-  "AE", "AF", "AG", "AM", "AO", "AQ", "AR", "AT", "AU", "AZ", "BA", "BB", "BD", 
-  "BE", "BH", "BN", "BR", "BS", "BW", "BY", "CA", "CH", "CL", "CN", "CO", "CR", 
-  "CU", "CY", "DE", "DK", "DO", "DZ", "EC", "EE", "EG", "ES", "ET", "FI", "FJ", 
-  "FK", "FR", "GB", "GE", "GH", "GI", "GL", "GR", "GT", "GU", "HK", "HN", "HR", 
-  "HU", "ID", "IE", "IL", "IN", "IR", "IT", "JM", "JO", "JP", "KE", "KH", "KP", 
-  "KR", "KW", "LB", "LK", "LT", "LU", "LV", "MA", "MC", "MK", "MT", "MU", "MW", 
-  "MX", "MY", "NG", "NI", "NL", "NO", "NP", "NZ", "OM", "PA", "PE", "PH", "PK", 
-  "PL", "PT", "PY", "QA", "RO", "RS", "RU", "RW", "SA", "SE", "SG", "SI", "SN", 
-  "SV", "TH", "TR", "TT", "TW", "TZ", "UA", "UG", "US", "UY", "VA", "VE", "VI", 
-  "VN", "XK", "ZA", "ZW")
+sets  <- c("tweets:hashtags", "tweets:links", "tweets:mentions", "user:is_public")
+zsets <- c("words", "user:followers", "user:num_tweets")
+
+langs <- read.csv("./data/lang-codes.csv", header=FALSE)
+langs <- as.matrix(langs)
+countries <- read.csv("./data/country-codes.csv", header=FALSE)
+countries <- as.matrix(countries)
 
 for (i in 1:length(sets)) {
   print( paste(sets[i], ":", pp( redisSCard(sets[i]))))
