@@ -12,6 +12,11 @@ library(wordcloud) # generate visual word clouds
 source('distributions.R')
 source('multiplot.R')
 
+# load vix
+# vix <- read.csv("./data/vix.csv",header=T,fileEncoding="utf-8")
+# names(vix) <- c("Date","Open","High","Open","Close")
+# vix$Date <- mdy(vix$Date)
+
 favs <- read.csv("./data/favs.csv")
 
 attach(favs)
