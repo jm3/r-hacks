@@ -111,8 +111,12 @@ tweet_corpus <- tm_map(tweet_corpus, tolower)
 tweet_corpus <- tm_map(tweet_corpus, removePunctuation)
 tweet_corpus <- tm_map(tweet_corpus, removeNumbers)
 
-# exclude some more common stopwords i say a lot
-tweet_stopwords <- c(stopwords("english"), "via", "rt", "im", "youre", "theres"
+# FIXME: replace above array literal with a short array of twitter stop words + staple on list of twitter friends
+tweet_stopwords <- c(stopwords("english"), "via", "rt", "im", "youre", "theres")
+twitter_friends <- read.csv("./data/twitter-friends.csv", header=T, fileEncoding="utf-8")
+
+# exclude some more common stopwords that I say frequently
+tweet_stopwords <- c(stopwords("english"), "via", "rt", "im", "youre", "theres",
   "joroan", "jm", "stdoyle", "cstoller", "vnaylon", "jeffheuer", "ayn", "buzz", "jamiew", 
   "peterhoneyman", "bloggerton", "proofapi", "proofads", "bmorrissey", "markjardine", 
   "rrwhite", "timhaines", "jenspec", "adampritzker", "sugarhousebar", "mattbinkowski", 
@@ -124,6 +128,7 @@ tweet_stopwords <- c(stopwords("english"), "via", "rt", "im", "youre", "theres"
   "alexchoi", "carinnatarvin", "david", "dcurtis", "essl", "carinnatarvin", "michael", "amadad",
   "formalplay", "samaman", "markromanek", "twilio", "cdixon", "companypolicy"
 )
+
 tweet_corpus <- tm_map(tweet_corpus, removeWords, tweet_stopwords)
 dtm <- TermDocumentMatrix(tweet_corpus, control = list(minWordLength = 2))
 findFreqTerms(dtm, lowfreq=4)
