@@ -20,7 +20,7 @@ source("multiplot.R")
 favs <- read.csv("./data/favs.csv")
 
 attach(favs)
-# tweet IDs are opaque identifiers; we don't do math on them; thus factors
+# tweet IDs are opaque identifiers and we do not peform math on them; thus factors
 favs$tweet_id <-factor(tweet_id, order=T)
 
 # strings not factors
@@ -101,11 +101,11 @@ multiplot(tweets_per_week_plot, mean_tweet_length_plot, fav_length_plot, tweet_v
 # recent_tweets <- do.call("rbind", lapply(recent_tweets, as.data.frame)) # slick; look ma no loops
 # dim(recent_tweets)
 
-# or just use the tweets we've already loaded
+# or just use the tweets that are already loaded
 tweet_text <- tweets$tweet
 tweet_corpus <- Corpus(VectorSource(as.vector(tweet_text, mode="character")))
 
-# strip non-ASCII chars because TM can't handle them
+# strip non-ASCII chars because TM appears unable to handle them
 tweet_corpus <- tm_map(tweet_corpus, function(x) iconv(enc2utf8(x), sub = "byte"))
 tweet_corpus <- tm_map(tweet_corpus, tolower)
 tweet_corpus <- tm_map(tweet_corpus, removePunctuation)
