@@ -1,16 +1,16 @@
-# dependencies; uncomment to install
-library(ggplot2) # for graphing
-library(gridExtra) # for side-by-side graphing
-library(lubridate) # melt dates
-library(MASS) # fitdistr; max-likelihood fitting of univariate distr.s
-library(msm) # rtnormal; truncated normal distributions
-library(stringr) # mine text
+library(ggplot2)    # for graphing
+library(gridExtra)  # for side-by-side graphing
+library(lubridate)  # melt dates
+library(MASS)       # fitdistr; max-likelihood fitting of univariate distr.s
+library(msm)        # rtnormal; truncated normal distributions
+library(stringr)    # mine text
 library(timeSeries) # work with TS data
-library(tm) # mine text
-library(twitteR) # use the Twitter API 
-library(wordcloud) # generate visual word clouds
-source('distributions.R')
-source('multiplot.R')
+library(tm)         # mine text
+library(twitteR)    # use the Twitter API
+library(wordcloud)  # generate visual word clouds
+
+source("distributions.R")
+source("multiplot.R")
 
 # load vix
 # vix <- read.csv("./data/vix.csv",header=T,fileEncoding="utf-8")
@@ -112,7 +112,7 @@ tweet_corpus <- tm_map(tweet_corpus, removePunctuation)
 tweet_corpus <- tm_map(tweet_corpus, removeNumbers)
 
 # exclude some more common stopwords i say a lot
-tweet_stopwords <- c(stopwords('english'), "via", "rt", "im", "youre", "theres"
+tweet_stopwords <- c(stopwords("english"), "via", "rt", "im", "youre", "theres"
   "joroan", "jm", "stdoyle", "cstoller", "vnaylon", "jeffheuer", "ayn", "buzz", "jamiew", 
   "peterhoneyman", "bloggerton", "proofapi", "proofads", "bmorrissey", "markjardine", 
   "rrwhite", "timhaines", "jenspec", "adampritzker", "sugarhousebar", "mattbinkowski", 
