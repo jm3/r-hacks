@@ -1,8 +1,8 @@
 *.Rproj
 *.png
 *pdf
+.DS_Store
 .RData
 .Rhistory
 .Rproj.user
 tweets.R
-shit
