@@ -1,6 +1,7 @@
 # R Learnings
 # http://www.johndcook.com/R_language_for_programmers.html
-# referencing matrix rows + cols: 
+
+# Referencing matrix rows + cols:
 m <- matrix(1:4,nrow=2)
 m[1,] # first row (1,3)
 m[,1] # first column (1,2)
@@ -11,14 +12,14 @@ attach(df) # = $_ in perl, default variable / DF for functions
 
 str(df) # summarize a data structure and print its types
 
-# nominal variables have no ordering (vs ordinal vars)
+# Nominal variables have no ordering (vs ordinal vars)
 # Categorical (nominal) and ordered categorical (ordinal) variables in R are called factors.
 
 rownames = whatevercolumnname # specific which column name R should use for row data on graphs
 
 # lists collect multiple variables into a single bucket
 
-x%%y  : Modulus (x mod y) 5%%2 is 1 
+x%%y  : Modulus (x mod y) 5%%2 is 1
 x%/%y : Integer division 5%/%2 is 2
 
 # FIXME not working for some reason
