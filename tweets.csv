@@ -745,7 +745,7 @@ date,time,tweet,tweet_id,length,hashtag,at_mention,at_message,RT,RT_pos,link,lin
 "2008-02-02","22:14","ROBOTS MAKE RECORDS! http://tinyurl.com/2oco67",671158932,46,FALSE,FALSE,FALSE,FALSE,-1,TRUE,24,FALSE
 "2007-03-14","18:57","im a star in my car http://tinyurl.com/24f65o",7881701,46,FALSE,FALSE,FALSE,FALSE,-1,TRUE,23,FALSE
 "2009-05-17","18:36","show your work: http://tr.im/12flickrrockstars",1827866424,46,FALSE,FALSE,FALSE,FALSE,-1,TRUE,19,FALSE
-"2009-09-04","8:11","What does a petabyte cost? http://bit.ly/MXNA"Q,3752996542,46,FALSE,FALSE,FALSE,FALSE,-1,TRUE,30,FALSE
+"2009-09-04","8:11","What does a petabyte cost? http://bit.ly/MXNA",3752996542,46,FALSE,FALSE,FALSE,FALSE,-1,TRUE,30,FALSE
 "2009-12-01","21:41","@jackpine and @alanlwhite have joined the fray.",6247847355,47,FALSE,TRUE,TRUE,FALSE,-1,FALSE,-1,FALSE
 "2009-11-29","18:49","@buzz Can I block someone from within Birdfeed?",6176491254,47,FALSE,TRUE,TRUE,FALSE,-1,FALSE,-1,FALSE
 "2010-06-03","9:23","@Old_Co I see OldCo as one word. Is that wrong?",15313834128,47,FALSE,TRUE,TRUE,FALSE,-1,FALSE,-1,FALSE
